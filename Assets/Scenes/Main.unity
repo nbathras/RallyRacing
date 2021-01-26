@@ -7672,8 +7672,8 @@ GameObject:
   m_Component:
   - component: {fileID: 424931405}
   - component: {fileID: 424931404}
-  - component: {fileID: 424931403}
   - component: {fileID: 424931402}
+  - component: {fileID: 424931403}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -7705,15 +7705,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 424931401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 0110f245bfcfc7d459681f7bd9ebc590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: 7777
-  NoDelay: 1
-  serverMaxMessageSize: 16384
-  serverMaxReceivesPerTick: 10000
-  clientMaxMessageSize: 16384
-  clientMaxReceivesPerTick: 1000
+  port: 7778
+  maxMessageSize: 16384
+  handshakeMaxSize: 3000
+  noDelay: 1
+  sendTimeout: 5000
+  receiveTimeout: 20000
+  serverMaxMessagesPerTick: 10000
+  clientMaxMessagesPerTick: 1000
+  batchSend: 1
+  waitBeforeSend: 0
+  clientUseWss: 0
+  sslEnabled: 0
+  sslCertJson: ./cert.json
+  sslProtocols: 3072
+  _logLevels: 0
 --- !u!114 &424931404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7733,7 +7742,7 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 424931403}
+  transport: {fileID: 0}
   networkAddress: localhost
   maxConnections: 4
   disconnectInactiveConnections: 0
@@ -7748,10 +7757,6 @@ MonoBehaviour:
   - {fileID: 890039305}
   - {fileID: 1885886349}
   - {fileID: 1240717310}
-  playerSpriteList:
-  - {fileID: 21300000, guid: 50944c6a12c21524982980ea87b414db, type: 3}
-  - {fileID: 21300000, guid: 6728dd5c857ac1a4987fa30c122ce352, type: 3}
-  - {fileID: 21300000, guid: 19f8e537ad992f247af96745ef2c8a44, type: 3}
 --- !u!4 &424931405
 Transform:
   m_ObjectHideFlags: 0
