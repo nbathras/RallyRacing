@@ -6,8 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class PlayerController : NetworkBehaviour {
 
-    private static int NUMBER_OF_PLAYERS = 0;
-
     [SerializeField]
     private List<Sprite> spriteList;
 
@@ -32,33 +30,26 @@ public class PlayerController : NetworkBehaviour {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         playerNameText.gameObject.GetComponent<MeshRenderer>().sortingLayerName = "ForegroundObjects";
-        NUMBER_OF_PLAYERS++;
     }
 
     private void OnNameChanged(string _Old, string _New) {
         playerNameText.text = playerName;
     }
 
-    private void OnColorChanged(Color _Old, Color _New) {
-        playerNameText.color = _New;
-        playerMaterialClone = new Material(GetComponent<Renderer>().material);
-        playerMaterialClone.color = _New;
-        GetComponent<Renderer>().material = playerMaterialClone;
-    }
-
     public override void OnStartLocalPlayer() {
         // Set Position and Parent Camera
+        Camera.main.transform.SetParent(transform);
+        Camera.main.transform.localPosition = new Vector3(0, 0, -10);
 
         string name = "Player" + Random.Range(100, 999);
-        Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-        CmdSetupPlayer(name, color);
+        CmdSetupPlayer(name);
     }
 
     [Command]
-    public void CmdSetupPlayer(string _name, Color _col) {
+    public void CmdSetupPlayer(string _name) {
         // player info sent to server, then server updates sync vars which handles it on all clients
         playerName = _name;
-        sr.sprite = spriteList[NUMBER_OF_PLAYERS - 1];
+        sr.sprite = spriteList[0];
     }
 
     private void FixedUpdate() {
@@ -96,10 +87,6 @@ public class PlayerController : NetworkBehaviour {
         Vector2 relativeForce = (rightAngleFromForward.normalized * -1.0f) * (driftForce * 10.0f);
 
         rb.AddForce(rb.GetRelativeVector(relativeForce));
-    }
-
-    private void OnDestroy() {
-        NUMBER_OF_PLAYERS--;
     }
 
     /*
